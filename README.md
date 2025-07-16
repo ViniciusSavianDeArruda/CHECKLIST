@@ -7,7 +7,7 @@ Aplicativo web desenvolvido para ajudar no gerenciamento de tarefas do dia a dia
 ## 🚀 Demonstração
 
 Acesse a versão online do projeto (caso esteja publicado):  
-🔗 [https://checklist.vercel.app](https://checklist.vercel.app) *(substitua com o link real caso tenha)*
+🔗 [https://checklist.vercel.app](https://checklist-bay.vercel.app/) 
 
 ---
 
