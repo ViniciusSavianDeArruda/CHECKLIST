@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Aplicativo de lista de tarefas para organizar sua rotina." />
+    <title>Lista de Tarefas</title>
+
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="js/scripts.js" defer></script>
+  </head>
+
+  <body>
+    <main class="todo-container">
+      <header>
+        <h1>CHECKLIST</h1>
+      </header>
+
+      <form id="todo-form" autocomplete="off">
+        <p>Adicione sua tarefa</p>
+        <p id="error-message" class="hide error-message">Adicione uma tarefa para continuar.</p>
+
+        <div class="form-control">
+          <input
+            type="text"
+            id="todo-input"
+            placeholder="O que você vai fazer?"
+            maxlength="40"
+          />
+          <button type="submit" aria-label="Adicionar tarefa">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+      </form>
+
+      <form id="edit-form" class="hide" autocomplete="off">
+        <p>Edite sua tarefa</p>
+        <div class="form-control">
+          <input type="text" id="edit-input" maxlength="30" />
+          <button type="submit" aria-label="Salvar edição">
+            <i class="fa-solid fa-check-double"></i>
+          </button>
+        </div>
+        <div class="form-footer">
+          <button id="cancel-edit-btn" type="button">Cancelar</button>
+        </div>
+      </form>
+
+      <aside id="toolbar">
+        <div id="search">
+          <h4>Pesquisar:</h4>
+          <form onsubmit="event.preventDefault();">
+            <input type="text" id="search-input" placeholder="Buscar..." />
+            <button type="button" id="erase-button" aria-label="Limpar busca">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </form>
+        </div>
+
+        <div id="filter">
+          <h4>Filtrar:</h4>
+          <select id="filter-select">
+            <option value="all">Todos</option>
+            <option value="done">Feitos</option>
+            <option value="todo">A fazer</option>
+          </select>
+        </div>
+      </aside>
+
+      <section id="todo-list">
+        <!-- tarefas aparecem aqui via JS -->
+      </section>
+    </main>
+  </body>
+</html>
+

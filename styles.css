@@ -1,0 +1,193 @@
+/* === Reset e configurações gerais === */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: Verdana, sans-serif;
+  color: #333;
+}
+
+body {
+  background-color: #e8f0f2;
+  font-size: 1rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* === Botões === */
+button {
+  background-color: #fdfdfd;
+  color: #102f5e;
+  border: 2px solid #102f5e;
+  padding: 0.3rem 0.6rem;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* Transição específica e rápida */
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #102f5e;
+
+  /* Leve aumento para feedback visual */
+  transform: scale(1.05);
+}
+
+button:hover > i {
+  color: #fff;
+}
+
+button i {
+  pointer-events: none;
+  color: #102f5e;
+  font-weight: bold;
+
+  /* Transição só da cor */
+  transition: color 0.2s ease;
+}
+
+/* === Inputs e Selects === */
+input,
+select {
+  padding: 0.25rem 0.5rem;
+  transition: border 0.3s ease;
+}
+
+/* Estilo para erro nos inputs */
+input.error {
+  border: 2px solid red;
+  outline: none;
+}
+
+/* === Utilitários === */
+.hide {
+  display: none;
+}
+
+/* === Container principal === */
+.todo-container {
+  max-width: 450px;
+  background-color: #fdfdfd;
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* === Cabeçalho === */
+.todo-container header {
+  text-align: center;
+  padding: 0 1rem 1rem;
+  border-bottom: 1px solid #ccc;
+}
+
+/* === Formulários === */
+#todo-form,
+#edit-form {
+  padding: 1rem;
+  border-bottom: 1px solid #ccc;
+}
+
+#todo-form p,
+#edit-form p {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.form-control {
+  display: flex;
+}
+
+.form-control input {
+  flex: 1;
+  margin-right: 0.3rem;
+}
+
+#cancel-edit-btn {
+  margin-top: 1rem;
+  color: #6b6b6b;
+}
+
+/* === Barra de ferramentas (busca e filtro) === */
+#toolbar {
+  padding: 1rem;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  gap: 1rem;
+}
+
+#toolbar h4 {
+  margin-bottom: 0.5rem;
+}
+
+#search {
+  width: 65%;
+  display: flex;
+  flex-direction: column;
+  padding-right: 1rem;
+  border-right: 1px solid #ddd;
+}
+
+#search form {
+  display: flex;
+}
+
+#search input {
+  width: 100%;
+  margin-right: 0.3rem;
+}
+
+#filter {
+  width: 35%;
+  display: flex;
+  flex-direction: column;
+}
+
+#filter select {
+  flex: 1;
+}
+
+/* === Lista de tarefas === */
+.todo {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+  transition: 0.3s;
+}
+
+.todo h3 {
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.todo button {
+  margin-left: 0.4rem;
+}
+
+/* Tarefa concluída */
+.done {
+  background: #395169;
+}
+
+.done h3 {
+  color: #fff;
+  text-decoration: line-through;
+  font-style: italic;
+}
+
+/* === Mensagem de erro === */
+.error-message {
+  color: red;
+  text-align: center;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
