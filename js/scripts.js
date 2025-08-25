@@ -1,3 +1,35 @@
+// === Tema Claro/Escuro aprimorado ===
+const themeToggleBtn = document.getElementById("theme-toggle");
+
+function setTheme(isDark) {
+  document.body.classList.toggle("dark-theme", isDark);
+  if (themeToggleBtn) {
+    themeToggleBtn.innerHTML = isDark
+      ? '<i class="fa-solid fa-sun" aria-hidden="true"></i>'
+      : '<i class="fa-solid fa-moon" aria-hidden="true"></i>';
+    themeToggleBtn.setAttribute("aria-pressed", String(!!isDark));
+    themeToggleBtn.setAttribute("title", isDark ? "Modo claro" : "Modo escuro");
+  }
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+}
+
+if (themeToggleBtn) {
+  themeToggleBtn.addEventListener("click", () => {
+    const isDark = !document.body.classList.contains("dark-theme");
+    setTheme(isDark);
+  });
+}
+
+// Inicialização: respeitar preferência do usuário, depois preferência do sistema
+(function initTheme() {
+  const saved = localStorage.getItem("theme");
+  if (saved) {
+    setTheme(saved === "dark");
+    return;
+  }
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  setTheme(prefersDark);
+})();
 // === Seleção de elementos ===
 const todoForm = document.querySelector("#todo-form");
 const todoInput = document.querySelector("#todo-input");
@@ -9,6 +41,8 @@ const searchInput = document.querySelector("#search-input");
 const eraseBtn = document.querySelector("#erase-button");
 const filterSelect = document.querySelector("#filter-select");
 const errorMessage = document.querySelector("#error-message");
+const totalCountEl = document.getElementById('total-count');
+const doneCountEl = document.getElementById('done-count');
 
 let oldInputValue = "";
 const MAX_TASK_LENGTH = 40;
@@ -16,7 +50,7 @@ const MAX_TASK_LENGTH = 40;
 // === Funções principais ===
 
 // Cria um novo item na lista
-function saveTodo(text, done = false, saveToStorage = true) {
+function saveTodo(text, done = false, saveToStorage = true, animate = true) {
   const todo = document.createElement("div");
   todo.classList.add("todo");
   if (done) todo.classList.add("done");
@@ -31,14 +65,30 @@ function saveTodo(text, done = false, saveToStorage = true) {
   todo.appendChild(createIconButton("remove-todo", "fa-xmark", "Remover tarefa"));
 
   todoList.appendChild(todo);
+  // adicionar animação de entrada quando desejado e quando o usuário não pediu redução de movimento
+  try {
+    if (animate && window.matchMedia && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      todo.classList.add('todo--enter');
+      todo.addEventListener('animationend', function onEnd() {
+        todo.classList.remove('todo--enter');
+        todo.removeEventListener('animationend', onEnd);
+      });
+    }
+  } catch (e) {
+    // fallback silencioso
+  }
+
   todoInput.value = "";
 
   if (saveToStorage) saveTodoLocalStorage({ text, done });
+  updateCounters();
 }
 
 // Cria um botão com ícone e tooltip
 function createIconButton(className, icon, titleText) {
   const button = document.createElement("button");
+  // evitar comportamento de submit dentro do formulário
+  button.type = 'button';
   button.classList.add(className);
   button.setAttribute("title", titleText);
   button.innerHTML = `<i class="fa-solid ${icon}"></i>`;
@@ -164,8 +214,34 @@ document.addEventListener("click", (e) => {
     editInput.value = title;
     oldInputValue = title;
   } else if (target.closest(".remove-todo")) {
-    todo.remove();
-    removeTodoLocalStorage(title);
+    // animação de remoção: adicionar classe e só remover após animationend
+    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) {
+      todo.remove();
+      removeTodoLocalStorage(title);
+    } else {
+      // tentativa de remover com animação, com fallback por timeout
+      todo.classList.add('todo--remove');
+      let removed = false;
+      const doRemove = () => {
+        if (removed) return;
+        removed = true;
+        if (todo.parentNode) todo.parentNode.removeChild(todo);
+        removeTodoLocalStorage(title);
+        updateCounters();
+        try { todo.removeEventListener('animationend', onEnd); } catch (e) {}
+        clearTimeout(timer);
+      };
+      const onEnd = () => doRemove();
+      todo.addEventListener('animationend', onEnd);
+      // fallback: se animationend não ocorrer (ex: classe não aplica), remove após 500ms
+      const timer = setTimeout(doRemove, 500);
+    }
+    // atualizar contadores quando lista mudar
+    // se animado, o cleanup chama updateCounters; caso contrário, atualizamos aqui
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      updateCounters();
+    }
   }
 });
 
@@ -235,6 +311,7 @@ function updateTodoStatusLocalStorage(todoText) {
     return todo;
   });
   localStorage.setItem("todos", JSON.stringify(todos));
+  updateCounters();
 }
 
 function updateTodoLocalStorage(oldText, newText, doneStatus) {
@@ -250,8 +327,19 @@ function updateTodoLocalStorage(oldText, newText, doneStatus) {
 // === Inicialização ===
 function loadTodos() {
   getTodosLocalStorage().forEach((todo) => {
-    saveTodo(todo.text, todo.done, false); // false para não duplicar no localStorage
+    saveTodo(todo.text, todo.done, false, false); // false para não duplicar no localStorage e não animar
   });
 }
 
 loadTodos();
+
+function updateCounters() {
+  const todos = document.querySelectorAll('.todo');
+  const total = todos.length;
+  const done = Array.from(todos).filter(t => t.classList.contains('done')).length;
+  if (totalCountEl) totalCountEl.innerText = `Total: ${total}`;
+  if (doneCountEl) doneCountEl.innerText = `Feitas: ${done}`;
+}
+
+// atualizar contador inicialmente pós carregamento
+updateCounters();

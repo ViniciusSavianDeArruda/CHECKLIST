@@ -1,14 +1,88 @@
+/* === Variáveis de tema === */
+:root {
+  --bg: #f6f7fb;
+  --card: #ffffff;
+  --text: #222222;
+  --muted: #6b6b6b;
+  --accent: #5b8cff;
+  --danger: #e74c3c;
+  --shadow: rgba(16,24,40,0.06);
+  --border: rgba(16,24,40,0.06);
+}
+
+/* Tema escuro */
+body.dark-theme {
+  --bg: #0f1720;
+  --card: #111318;
+  --text: #e6eef8;
+  --muted: #9aa4b2;
+  --accent: #6ea8fe;
+  --danger: #ff6b6b;
+  --shadow: rgba(0,0,0,0.6);
+  --border: rgba(255,255,255,0.06);
+}
+
+/* Aplicação das variáveis */
+body {
+  background: var(--bg);
+  color: var(--text);
+  transition: background 240ms ease, color 240ms ease;
+}
+
+.todo-container {
+  background: var(--card);
+  box-shadow: 0 6px 20px var(--shadow);
+  transition: background 240ms ease, box-shadow 240ms ease;
+}
+
+/* Botão de alternância */
+#theme-toggle {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 8px;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+  z-index: 20;
+}
+
+#theme-toggle:focus {
+  outline: 3px solid rgba(90,140,255,0.18);
+  outline-offset: 2px;
+}
+
+#theme-toggle[aria-pressed="true"] {
+  background: linear-gradient(180deg, rgba(110,168,254,0.12), rgba(110,168,254,0.06));
+  border-color: rgba(110,168,254,0.4);
+}
+
+/* Ajustes para elementos e estados no escuro */
+.dark-theme .error-message {
+  background: rgba(255,107,107,0.08);
+  color: var(--danger);
+}
+
+.todo.done {
+  opacity: 0.9;
+}
 /* === Reset e configurações gerais === */
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   font-family: Verdana, sans-serif;
-  color: #333;
 }
 
 body {
-  background-color: #e8f0f2;
+  background: var(--bg);
+  color: var(--text);
   font-size: 1rem;
 
   display: flex;
@@ -19,9 +93,9 @@ body {
 
 /* === Botões === */
 button {
-  background-color: #fdfdfd;
-  color: #102f5e;
-  border: 2px solid #102f5e;
+  background-color: transparent;
+  color: var(--text);
+  border: 2px solid var(--border);
   padding: 0.3rem 0.6rem;
   font-size: 1rem;
   cursor: pointer;
@@ -29,15 +103,12 @@ button {
   justify-content: center;
   align-items: center;
 
-  /* Transição específica e rápida */
-  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.12s ease;
 }
 
 button:hover {
-  background-color: #102f5e;
-
-  /* Leve aumento para feedback visual */
-  transform: scale(1.05);
+  background-color: var(--accent);
+  transform: scale(1.04);
 }
 
 button:hover > i {
@@ -46,11 +117,9 @@ button:hover > i {
 
 button i {
   pointer-events: none;
-  color: #102f5e;
+  color: var(--text);
   font-weight: bold;
-
-  /* Transição só da cor */
-  transition: color 0.2s ease;
+  transition: color 0.18s ease;
 }
 
 /* === Inputs e Selects === */
@@ -74,24 +143,24 @@ input.error {
 /* === Container principal === */
 .todo-container {
   max-width: 450px;
-  background-color: #fdfdfd;
+  background: var(--card);
   padding: 1.5rem;
   border-radius: 15px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px var(--shadow);
 }
 
 /* === Cabeçalho === */
 .todo-container header {
   text-align: center;
   padding: 0 1rem 1rem;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--border);
 }
 
 /* === Formulários === */
 #todo-form,
 #edit-form {
   padding: 1rem;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--border);
 }
 
 #todo-form p,
@@ -111,13 +180,13 @@ input.error {
 
 #cancel-edit-btn {
   margin-top: 1rem;
-  color: #6b6b6b;
+  color: var(--muted);
 }
 
 /* === Barra de ferramentas (busca e filtro) === */
 #toolbar {
   padding: 1rem;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--border);
   display: flex;
   gap: 1rem;
 }
@@ -131,7 +200,7 @@ input.error {
   display: flex;
   flex-direction: column;
   padding-right: 1rem;
-  border-right: 1px solid #ddd;
+  border-right: 1px solid var(--border);
 }
 
 #search form {
@@ -159,7 +228,7 @@ input.error {
   justify-content: space-around;
   align-items: center;
   padding: 1rem;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--border);
   transition: 0.3s;
 }
 
@@ -174,18 +243,18 @@ input.error {
 
 /* Tarefa concluída */
 .done {
-  background: #395169;
+  background: rgba(0,0,0,0.06);
 }
 
 .done h3 {
-  color: #fff;
+  color: var(--muted);
   text-decoration: line-through;
   font-style: italic;
 }
 
 /* === Mensagem de erro === */
 .error-message {
-  color: red;
+  color: var(--danger);
   text-align: center;
   margin-top: 0.5rem;
   font-size: 0.9rem;

@@ -18,6 +18,9 @@
 
   <body>
     <main class="todo-container">
+      <button id="theme-toggle" aria-label="Alternar tema" title="Alternar tema" aria-pressed="false">
+        <i class="fa-solid fa-moon"></i>
+      </button>
       <header>
         <h1>CHECKLIST</h1>
       </header>
@@ -76,6 +79,12 @@
       <section id="todo-list">
         <!-- tarefas aparecem aqui via JS -->
       </section>
+      <footer id="todo-footer">
+        <div id="counters">
+          <span id="total-count">Total: 0</span>
+          <span id="done-count">Feitas: 0</span>
+        </div>
+      </footer>
     </main>
   </body>
 </html>
